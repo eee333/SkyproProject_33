@@ -2,3 +2,5 @@ venv/
 postgres-data/
 .gitignore
 private.txt
+.docker_env
+.env
