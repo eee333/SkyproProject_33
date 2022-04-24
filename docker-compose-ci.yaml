@@ -4,7 +4,7 @@ services:
   front:
     image: sermalenk/skypro-front:base
     ports:
-      - 8034:80
+      - 80:80
     depends_on:
       - api
   api:
