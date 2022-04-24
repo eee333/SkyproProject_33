@@ -10,13 +10,23 @@ services:
   api:
     image: eee333hub/skypro_34:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     ports:
-      - 80:80
-    command: python manage.py migrate
+      - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    volumes:
+      - ./.docker_ci_env:/app/.env
+
+  migrations:
+    image: eee333hub/skypro_34:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
-      - ./.docker_ci_env:/app/.env
+      - ./.docker_env:/app/.env
+    command: python manage.py migrate
 
   postgres:
     image: postgres:latest
