@@ -10,7 +10,7 @@ services:
   api:
     image: eee333hub/skypro_34:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     ports:
-      - 8000:8000
+      - 80:80
     depends_on:
       postgres:
         condition: service_healthy
