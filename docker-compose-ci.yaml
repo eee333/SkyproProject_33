@@ -17,7 +17,7 @@ services:
       migrations:
         condition: service_completed_successfully
     volumes:
-      - ./.docker_ci_env:/app/.env
+      - ./.docker_env:/app/.env
 
   migrations:
     image: eee333hub/skypro_34:$GITHUB_REF_NAME-$GITHUB_RUN_ID
