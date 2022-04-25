@@ -11,4 +11,4 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
         ordering = ("id",)
 
-    objects = UserManager()
+    # objects = UserManager()
