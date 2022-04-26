@@ -3,4 +3,7 @@ postgres-data/
 .gitignore
 private.txt
 .docker_env
+.docker_ci_env
 .env
+docker-compose.yaml
+docker-compose-ci.yaml
