@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from core.models import User
 
@@ -6,7 +7,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ["password"]
+        fields = '__all__'
+        # exclude = ["password"]
 
 
 class UserCrateSerializer(serializers.ModelSerializer):
@@ -15,8 +17,20 @@ class UserCrateSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+    def create(self, validated_data):
+        user = super().create(validated_data)
+
+        user.set_password(user.password)
+        user.save()
+        return user
+
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+    def save(self):
+        if password := self.validated_data.get('password'):
+            self.validated_data['password'] = make_password(password)
+        return super().save()

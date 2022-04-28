@@ -9,6 +9,8 @@ class UserAdmin(BaseUserAdmin):
     readonly_fields = ("date_joined", "last_login")
     search_fields = ("username", "email", "first_name", "last_name")
     list_filter = ("is_staff", "is_active", "is_superuser")
+    # fieldsets = BaseUserAdmin.fieldsets + ((None, {'fields': ('type',)}),)
+    # add_fieldsets = BaseUserAdmin.add_fieldsets + ((None, {'fields': ('type',)}),)
 
 
 admin.site.register(User, UserAdmin)
