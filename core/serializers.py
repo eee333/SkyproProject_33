@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
@@ -15,17 +16,27 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCrateSerializer(serializers.ModelSerializer):
-
+    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password_repeat = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = '__all__'
+        read_only_fields = ("id",)
+        fields = (
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "password",
+            "password_repeat",
+        )
 
-    def validate(self, attr: dict):
-        password: str = attr.get("password")
-        password_repeat: str = attr.pop("password_repeat", None)
+    def validate(self, attrs: dict):
+        password: str = attrs.get("password")
+        password_repeat: str = attrs.pop("password_repeat", None)
         if password != password_repeat:
-            raise ValidationError("password adn password_repeat are not equal")
-        return attr
+            raise ValidationError(f"password adn password_repeat are not equal:{password_repeat}")
+        return attrs
 
     def create(self, validated_data):
         user = super().create(validated_data)
