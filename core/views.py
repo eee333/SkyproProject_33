@@ -1,6 +1,7 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
+from rest_framework import permissions
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, \
-    GenericAPIView
+    GenericAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -39,6 +40,19 @@ class LoginView(GenericAPIView):
 class UserUpdateView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
+
+
+class ProfileView(RetrieveUpdateAPIView):
+    model = User
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return Response({})
 
 
 class UserUpdatePassView(UpdateAPIView):
