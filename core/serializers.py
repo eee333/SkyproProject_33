@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -35,7 +36,7 @@ class UserCrateSerializer(serializers.ModelSerializer):
         password: str = attrs.get("password")
         password_repeat: str = attrs.pop("password_repeat", None)
         if password != password_repeat:
-            raise ValidationError(f"password adn password_repeat are not equal:{password_repeat}")
+            raise ValidationError("password adn password_repeat are not equal")
         return attrs
 
     def create(self, validated_data):
@@ -66,3 +67,19 @@ class UserUpdatePassSerializer(serializers.ModelSerializer):
         if password := self.validated_data.get('password'):
             self.validated_data['password'] = make_password(password)
         return super().save()
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs: dict):
+        username: str = attrs.get("username")
+        password: str = attrs.get("password")
+        user = authenticate(username=username, password=password)
+        if not user:
+            raise ValidationError("username or password is incorrect")
+        attrs["user"] = user
+        return attrs
+
+

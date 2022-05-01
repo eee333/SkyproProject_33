@@ -1,9 +1,12 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+from django.contrib.auth import login
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, \
+    GenericAPIView
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from core.models import User
 from core.serializers import UserSerializer, UserCrateSerializer, \
-    UserUpdateSerializer, UserUpdatePassSerializer
+    UserUpdateSerializer, UserUpdatePassSerializer, LoginSerializer
 
 
 class UserListView(ListAPIView):
@@ -21,9 +24,16 @@ class UserCreateView(CreateAPIView):
     serializer_class = UserCrateSerializer
 
 
-class UserLoginView(RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserCrateSerializer
+class LoginView(GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        s: UserLoginSerializer = self.get_serializer(data=request.data)
+        s.is_valid(raise_exception=True)
+        user = s.validated_data["user"]
+        login(request, user=user)
+        user_serializer = UserSerializer(instance=user)
+        return Response(user_serializer.data)
 
 
 class UserUpdateView(UpdateAPIView):
