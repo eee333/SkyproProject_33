@@ -36,7 +36,7 @@ class UserCrateSerializer(serializers.ModelSerializer):
         password: str = attrs.get("password")
         password_repeat: str = attrs.pop("password_repeat", None)
         if password != password_repeat:
-            raise ValidationError("password adn password_repeat are not equal")
+            raise ValidationError("password and password_repeat are not equal")
         return attrs
 
     def create(self, validated_data):

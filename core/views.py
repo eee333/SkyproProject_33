@@ -28,7 +28,7 @@ class LoginView(GenericAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
-        s: UserLoginSerializer = self.get_serializer(data=request.data)
+        s: LoginSerializer = self.get_serializer(data=request.data)
         s.is_valid(raise_exception=True)
         user = s.validated_data["user"]
         login(request, user=user)
