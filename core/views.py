@@ -52,10 +52,6 @@ class ProfileView(RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    @method_decorator(ensure_csrf_cookie)
     def delete(self, request, *args, **kwargs):
         logout(request)
         return Response({})
@@ -70,15 +66,3 @@ class UserDeleteView(DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-
-class LogoutView(GenericAPIView):
-    model = User
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = UserSerializer
-
-    def get_object(self):
-        return self.request.user
-
-    def get(self, request, *args, **kwargs):
-        logout(request)
-        return Response({})
