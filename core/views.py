@@ -1,4 +1,6 @@
 from django.contrib.auth import login, logout
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import permissions
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, \
     GenericAPIView, RetrieveUpdateAPIView
@@ -50,6 +52,10 @@ class ProfileView(RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    @method_decorator(ensure_csrf_cookie)
     def delete(self, request, *args, **kwargs):
         logout(request)
         return Response({})
@@ -63,3 +69,16 @@ class UserUpdatePassView(UpdateAPIView):
 class UserDeleteView(DestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class LogoutView(GenericAPIView):
+    model = User
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return Response({})
