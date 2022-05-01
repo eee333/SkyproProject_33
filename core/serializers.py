@@ -66,14 +66,28 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 
 class UserUpdatePassSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, validators=[validate_password])
+
     class Meta:
         model = User
-        fields = '__all__'
+        read_only_fields = ("id",)
+        fields = (
+            "old_password",
+            "new_password",
+        )
 
-    def save(self):
-        if password := self.validated_data.get('password'):
-            self.validated_data['password'] = make_password(password)
-        return super().save()
+    def validate(self, attrs: dict):
+        old_password: str = attrs.get("old_password")
+        user: User = self.instance
+        if not user.check_password(old_password):
+            raise ValidationError("old_password is incorrect")
+        return attrs
+
+    def update(self, instance: User, validated_data):
+        instance.set_password(validated_data["new_password"])
+        instance.save(update_fields=["password"])
+        return instance
 
 
 class LoginSerializer(serializers.Serializer):

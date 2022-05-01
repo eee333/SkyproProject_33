@@ -58,8 +58,12 @@ class ProfileView(RetrieveUpdateAPIView):
 
 
 class UserUpdatePassView(UpdateAPIView):
-    queryset = User.objects.all()
+    model = User
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserUpdatePassSerializer
+
+    def get_object(self):
+        return self.request.user
 
 
 class UserDeleteView(DestroyAPIView):
