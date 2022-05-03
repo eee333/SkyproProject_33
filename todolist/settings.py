@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 CSRF_TRUSTED_ORIGINS = (
@@ -77,6 +78,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -150,7 +153,8 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '8156922'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'QjDLuJQzEp0WvmrY9o4Z'
-# SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'photos', 'notify']
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'photos', 'notify']
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
-SOCIAL_AUTH_LOGIN_URL = '/login-url/'
+# SOCIAL_AUTH_LOGIN_URL = '/login-url/'
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
