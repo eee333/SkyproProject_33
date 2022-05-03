@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'social_django',
     'core',
 ]
 
@@ -141,3 +142,15 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.User'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '8156922'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'QjDLuJQzEp0WvmrY9o4Z'
+# SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'photos', 'notify']
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
+# SOCIAL_AUTH_LOGIN_URL = '/login-url/'
