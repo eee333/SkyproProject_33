@@ -153,4 +153,4 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = 'QjDLuJQzEp0WvmrY9o4Z'
 # SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'photos', 'notify']
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
-# SOCIAL_AUTH_LOGIN_URL = '/login-url/'
+SOCIAL_AUTH_LOGIN_URL = '/login-url/'
