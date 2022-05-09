@@ -6,6 +6,7 @@ cryptography==37.0.1
 defusedxml==0.7.1
 distlib==0.3.4
 Django==4.0.1
+django-filter==21.1
 djangorestframework==3.13.1
 filelock==3.6.0
 idna==3.3
