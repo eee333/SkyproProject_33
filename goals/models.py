@@ -28,6 +28,9 @@ class GoalCategory(DatesModelMixin):
     user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
     is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
 
+    def __str__(self):
+        return self.title
+
 
 class Goal(DatesModelMixin):
     class Meta:
@@ -80,7 +83,7 @@ class GoalComment(DatesModelMixin):
 
     text = models.TextField(verbose_name="Текст", max_length=1000)
     goal = models.ForeignKey(Goal, verbose_name="Цель", related_name="goal_comments", on_delete=models.PROTECT)
-    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
+    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT, null=True, default=None)
 
     def __str__(self):
         return self.text
