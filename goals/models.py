@@ -12,9 +12,10 @@ class DatesModelMixin(models.Model):
     updated = models.DateTimeField(verbose_name="Дата последнего обновления")
 
     def save(self, *args, **kwargs):
+        time_now = timezone.now()
         if not self.id:  # Когда модель только создается – у нее нет id
-            self.created = timezone.now()
-        self.updated = timezone.now()  # Каждый раз, когда вызывается save, проставляем свежую дату обновления
+            self.created = time_now
+        self.updated = time_now  # Каждый раз, когда вызывается save, проставляем свежую дату обновления
         return super().save(*args, **kwargs)
 
 
@@ -70,3 +71,16 @@ class Goal(DatesModelMixin):
 
     def __str__(self):
         return self.title
+
+
+class GoalComment(DatesModelMixin):
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
+
+    text = models.TextField(verbose_name="Текст", max_length=1000)
+    goal = models.ForeignKey(Goal, verbose_name="Цель", related_name="goal_comments", on_delete=models.PROTECT)
+    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.text
