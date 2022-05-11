@@ -1,6 +1,6 @@
 name: Build and deploy action
 on:
-  pull_request:
+  push:
     branches:
       - main
 jobs:
