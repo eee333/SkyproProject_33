@@ -97,7 +97,7 @@ class Goal(DatesModelMixin):
         default=None,
         max_length=1000,
     )
-    category = models.ForeignKey(GoalCategory, verbose_name="Категория", on_delete=models.PROTECT)
+    category = models.ForeignKey(GoalCategory, verbose_name="Категория", related_name="goals", on_delete=models.PROTECT)
     user = models.ForeignKey(User, verbose_name="Автор", related_name="goals", on_delete=models.PROTECT)
     status = models.PositiveSmallIntegerField(
         verbose_name="Статус", choices=Status.choices, default=Status.TO_DO
