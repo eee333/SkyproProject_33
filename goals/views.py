@@ -9,7 +9,8 @@ from goals.filters import GoalDateFilter
 from goals.models import GoalCategory, Goal, GoalComment, Board
 from goals.permissions import BoardPermissions
 from goals.serializers import GoalCategoryCreateSerializer, GoalCategorySerializer, GoalCreateSerializer, \
-    GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer, BoardSerializer, BoardCreateSerializer
+    GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer, BoardSerializer, BoardCreateSerializer, \
+    BoardListSerializer
 
 
 class GoalCategoryCreateView(CreateAPIView):
@@ -134,11 +135,11 @@ class BoardCreateView(CreateAPIView):
 
 class BoardView(RetrieveUpdateDestroyAPIView):
     model = Board
-    permission_classes = [IsAuthenticated, BoardPermissions]
     serializer_class = BoardSerializer
+    permission_classes = [IsAuthenticated, BoardPermissions]
 
     def get_queryset(self):
-        # Обратите внимание на фильтрацию – она идет через participants
+        # фильтрация идет через participants
         return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
 
     def perform_destroy(self, instance: Board):
@@ -152,3 +153,16 @@ class BoardView(RetrieveUpdateDestroyAPIView):
                 status=Goal.Status.ARCHIVED
             )
         return instance
+
+
+class BoardListView(ListAPIView):
+    model = Board
+    serializer_class = BoardListSerializer
+    permission_classes = [IsAuthenticated, BoardPermissions]
+    pagination_class = LimitOffsetPagination
+    filter_backends = [OrderingFilter]
+    ordering = ["title"]
+
+    def get_queryset(self):
+        # фильтрация идет через participants
+        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
