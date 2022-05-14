@@ -14,6 +14,17 @@ class GoalCategoryCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", "user")
         fields = "__all__"
 
+    def validate_board(self, value):
+        if value.is_deleted:
+            raise serializers.ValidationError("Not allow")
+        if not BoardParticipant.objects.filter(
+            board=value,
+            role__in=[BoardParticipant.Role.OWNER, BoardParticipant.Role.WRITER],
+            user=self.context["request"].user
+        ).exists():
+            raise serializers.ValidationError("You mast be owner or writer")
+        return value
+
 
 class GoalCategorySerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -21,7 +32,7 @@ class GoalCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalCategory
         fields = "__all__"
-        read_only_fields = ("id", "created", "updated", "user")
+        read_only_fields = ("id", "created", "updated", "user", "board")
 
 
 class GoalSerializer(serializers.ModelSerializer):
@@ -34,10 +45,10 @@ class GoalSerializer(serializers.ModelSerializer):
 
     def validate_category(self, value):
         if value.is_deleted:
-            raise serializers.ValidationError("not allowed in deleted category")
+            raise serializers.ValidationError("Not allowed in deleted category")
 
-        if value.user != self.context["request"].user:
-            raise serializers.ValidationError("not owner of category")
+        if self.instance.category.board_id != value.board_id:
+            raise serializers.ValidationError("Transfer between boards not allowed")
 
         return value
 
@@ -50,6 +61,15 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated", "user")
         fields = "__all__"
 
+    def validate_category(self, value):
+        if not BoardParticipant.objects.filter(
+            board=value.board_id,
+            role__in=[BoardParticipant.Role.OWNER, BoardParticipant.Role.WRITER],
+            user=self.context["request"].user
+        ).exists():
+            raise serializers.ValidationError("You mast be owner or writer")
+        return value
+
 
 class GoalCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -58,13 +78,6 @@ class GoalCommentSerializer(serializers.ModelSerializer):
         model = GoalComment
         read_only_fields = ("id", "created", "updated", "user")
         fields = "__all__"
-
-    def validate_goal(self, value):
-
-        if value.user != self.context["request"].user:
-            raise serializers.ValidationError("not owner of goal")
-
-        return value
 
 
 class GoalCommentCreateSerializer(serializers.ModelSerializer):
@@ -76,10 +89,12 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate_goal(self, value):
-
-        if value.user != self.context["request"].user:
-            raise serializers.ValidationError("not owner of goal")
-
+        if not BoardParticipant.objects.filter(
+                board=value.category.board_id,
+                role__in=[BoardParticipant.Role.OWNER, BoardParticipant.Role.WRITER],
+                user=self.context["request"].user
+        ).exists():
+            raise serializers.ValidationError("You mast be owner or writer")
         return value
 
 
