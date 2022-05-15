@@ -22,10 +22,10 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
-
 class UserCrateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
     password_repeat = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
         read_only_fields = ("id",)
