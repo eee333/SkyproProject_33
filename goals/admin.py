@@ -84,7 +84,8 @@ class BoardParticipantInline(admin.TabularInline):
 class BoardAdmin(admin.ModelAdmin):
     list_display = ("title", "owner", "participants_count", "is_deleted",)
     search_fields = ("title",)
-    readonly_fields = ("created", "updated")
+    # fields = ("title", "owner")
+    readonly_fields = ("owner", "created", "updated")
     list_filter = ("is_deleted",)
     inlines = (BoardParticipantInline,)
 
