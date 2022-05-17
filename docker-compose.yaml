@@ -20,6 +20,18 @@ services:
     volumes:
       - ./.docker_env:/app/.env
 
+  bot:
+    build:
+      context: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    command: python manage.py runbot
+    volumes:
+      - ./.docker_env:/app/.env
+
   migrations:
     build:
       context: .
@@ -32,8 +44,6 @@ services:
 
   postgres:
     image: postgres:latest
-#    ports:
-#      - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
