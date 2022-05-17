@@ -19,6 +19,17 @@ services:
     volumes:
       - ./.docker_env:/app/.env
 
+  bot:
+    image: eee333hub/skypro_34:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    command: python manage.py runbot
+    volumes:
+      - ./.docker_env:/app/.env
+
   migrations:
     image: eee333hub/skypro_34:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
