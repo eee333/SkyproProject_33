@@ -12,7 +12,7 @@ class MessageFrom(BaseModel):
 
 class Chat(BaseModel):
     id: int
-    type: str
+    type: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     username: Optional[str] = None
