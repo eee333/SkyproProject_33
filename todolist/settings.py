@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'core',
     'goals',
+    'bot',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,5 @@ SOCIAL_AUTH_LOGIN_URL = '/login-url/'
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 # SOCIAL_AUTH_TRAILING_SLASH = False
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")

@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   front:
-    image: sermalenk/skypro-front:lesson_37
+    image: sermalenk/skypro-front:lesson_38
     ports:
       - 80:80
     depends_on:
@@ -16,6 +16,17 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
+    volumes:
+      - ./.docker_env:/app/.env
+
+  bot:
+    image: eee333hub/skypro_34:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    command: python manage.py runbot
     volumes:
       - ./.docker_env:/app/.env
 
