@@ -18,7 +18,6 @@ def test_user_create(client):
         "password_repeat": "string2yuyt"
     }
     expected_response = {
-        "id": 1,
         "username": "test_username",
         "first_name": "string",
         "last_name": "string",
@@ -32,6 +31,7 @@ def test_user_create(client):
     )
 
     assert response.status_code == 201
+    assert type(response.data.pop("id")) == int
     assert response.data == expected_response
 
 
