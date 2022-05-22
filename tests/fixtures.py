@@ -3,17 +3,13 @@ import pytest
 
 @pytest.fixture()
 @pytest.mark.django_db
-def logged_in_user(client, django_user_model):
-    username = "test_user"
-    password = "test_pass"
+def logged_in_user(client, user):
 
-    user = django_user_model.objects.create_user(
-        username=username, password=password
-    )
+    password = "string2yuyt"
 
     response = client.post(
         "/core/login",
-        {"username": username, "password": password},
+        {"username": user.username, "password": password},
         format="json"
     )
 

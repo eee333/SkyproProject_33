@@ -131,7 +131,7 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
 
 class BoardSerializer(serializers.ModelSerializer):
     participants = BoardParticipantSerializer(many=True)
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Board
@@ -139,7 +139,8 @@ class BoardSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated")
 
     def update(self, instance, validated_data):
-        owner = validated_data.pop("user")
+        # owner = validated_data.pop("user")
+        owner = self.context["request"].user
         new_participants = validated_data.pop("participants", [])
         new_by_id = {part["user"].id: part for part in new_participants}
 

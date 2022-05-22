@@ -3,9 +3,9 @@ import pytest
 
 @pytest.mark.django_db
 def test_update_password(client, logged_in_user):
-    old_password = "test_pass"
-    new_password = "test_pass_342"
-    username = "test_user"
+    old_password = "string2yuyt"
+    new_password = "string2yuyt2"
+    username = "test_username_3"
     data = {
         "old_password": old_password,
         "new_password": new_password
@@ -27,9 +27,9 @@ def test_update_password(client, logged_in_user):
 
     expected_response = {
         "username": username,
-        "first_name": "",
-        "last_name": "",
-        "email": ""
+        "first_name": "test_first_name",
+        "last_name": "test_last_name",
+        "email": "test@example.com"
     }
 
     assert response.status_code == 200
