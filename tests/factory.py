@@ -2,7 +2,7 @@ from freezegun import freeze_time
 
 import factory
 from core.models import User
-from goals.models import Board, BoardParticipant, GoalCategory
+from goals.models import Board, BoardParticipant, GoalCategory, Goal
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -46,3 +46,16 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     title = factory.Faker("job")
     user = factory.SubFactory(UserFactory)
     board = factory.SubFactory(BoardFactory)
+
+
+class GoalFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Goal
+
+    title = factory.Faker("job")
+    description = factory.Faker("job")
+    category = factory.SubFactory(CategoryFactory)
+    user = factory.SubFactory(UserFactory)
+    due_date = "2022-06-05"
+    status = 1
+    priority = 1

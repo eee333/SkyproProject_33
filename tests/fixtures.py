@@ -42,7 +42,6 @@ def board_participant_1(client, logged_in_user):
     return board_participant
 
 
-@freeze_time("2022-05-05T05:00:00")
 @pytest.fixture()
 @pytest.mark.django_db
 def category_1(client, logged_in_user, board_participant_1):
@@ -54,3 +53,4 @@ def category_1(client, logged_in_user, board_participant_1):
     )
 
     return category
+
