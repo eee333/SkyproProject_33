@@ -1,9 +1,6 @@
 import pytest
-from freezegun import freeze_time
 
-from goals.models import BoardParticipant
 from goals.serializers import BoardParticipantSerializer
-from tests.factory import BoardFactory
 
 
 @pytest.mark.django_db

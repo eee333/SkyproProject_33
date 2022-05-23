@@ -1,7 +1,8 @@
 import pytest
+from freezegun import freeze_time
 
 from goals.models import Board, BoardParticipant
-from tests.factory import UserFactory, BoardFactory, ParticipantFactory
+from tests.factory import UserFactory, BoardFactory, ParticipantFactory, CategoryFactory
 
 
 @pytest.fixture()
@@ -39,3 +40,17 @@ def board_participant_1(client, logged_in_user):
     # )
 
     return board_participant
+
+
+@freeze_time("2022-05-05T05:00:00")
+@pytest.fixture()
+@pytest.mark.django_db
+def category_1(client, logged_in_user, board_participant_1):
+
+    category = CategoryFactory(
+        title="test_board_1",
+        user=logged_in_user,
+        board=board_participant_1.board
+    )
+
+    return category

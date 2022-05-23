@@ -2,7 +2,7 @@ from freezegun import freeze_time
 
 import factory
 from core.models import User
-from goals.models import Board, BoardParticipant
+from goals.models import Board, BoardParticipant, GoalCategory
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -21,7 +21,6 @@ class BoardFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Board
 
-    # title = "test_board_2"
     title = factory.Faker("name")
 
 
@@ -38,3 +37,12 @@ class ParticipantFactory(factory.django.DjangoModelFactory):
     board = factory.SubFactory(BoardFactory)
     user = factory.SubFactory(UserFactory)
     role = 1
+
+
+class CategoryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = GoalCategory
+
+    title = factory.Faker("job")
+    user = factory.SubFactory(UserFactory)
+    board = factory.SubFactory(BoardFactory)
