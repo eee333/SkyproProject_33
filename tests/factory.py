@@ -21,7 +21,8 @@ class BoardFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Board
 
-    title = "test_board_2"
+    # title = "test_board_2"
+    title = factory.Faker("name")
 
 
 class ParticipantFactory(factory.django.DjangoModelFactory):

@@ -21,7 +21,7 @@ def test_board_create(client, logged_in_user):
     response = client.post(
         "/goals/board/create",
         data,
-        format="json"
+        content_type="application/json"
     )
 
     new_board_id = response.data.pop("id")
